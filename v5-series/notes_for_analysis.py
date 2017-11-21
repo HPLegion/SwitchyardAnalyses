@@ -113,8 +113,8 @@ for pID in lostParticles:
 
 
 # Compute and save emittances
-
-colnames = ["sourceID", "sourceName", "x_offset", "y_offset", "x_emittance", "y_emittance", "losses"]
+colnames = ["sourceID", "sourceName", "x_offset", "y_offset", "x_emittance", "y_emittance",
+            "x_norm_emittance", "y_norm_emittance", "losses", "relbeta"]
 emit_df = pd.DataFrame(columns=colnames)
 emit_temp = pd.DataFrame([np.zeros(len(colnames))], columns=colnames)
 for sID in sourceIDs:
@@ -123,6 +123,10 @@ for sID in sourceIDs:
     yoff = float(name.split('_')[3])
     xemit = monq.emittance_u(eventsBySrc[sID])
     yemit = monq.emittance_v(eventsBySrc[sID])
+    # Compute rel. beta for the screen 1e6 mm/ns ->m/s
+    beta = monBySrc[sID].abs_vel / scipy.constants.speed_of_light * 1e6
+    xemit_n = beta * (1 - beta**2)**(-0.5) * xemit # beta * gamme * emit
+    yemit_n = beta * (1 - beta**2)**(-0.5) * yemit
     losses = missesBySrc[sID]
     
     emit_temp["sourceID"] = sID
@@ -131,10 +135,27 @@ for sID in sourceIDs:
     emit_temp["y_offset"] = yoff
     emit_temp["x_emittance"] = xemit
     emit_temp["y_emittance"] = yemit
+    emit_temp["x_norm_emittance"] = xemit_n
+    emit_temp["y_norm_emittance"] = yemit_n
     emit_temp["losses"] = losses
+    emit_temp["relbeta"] = beta
 
     emit_df = emit_df.append(emit_temp, ignore_index=True)
 
 emit_df.sort_values(["x_offset", "y_offset"], inplace=True)
 emit_df.reset_index(inplace=True, drop=True)
-emit_df
+emit_df.to_csv(EMIT_FILENAME)
+
+
+
+alt.Chart(emit_df).mark_line().encode(
+    color='y_offset:N',
+    x='x_offset',
+    y='x_emittance',
+)
+
+alt.Chart(emit_df).mark_line().encode(
+    color='y_offset:N',
+    x='x_offset',
+    y='y_emittance',
+)
