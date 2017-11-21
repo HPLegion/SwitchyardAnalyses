@@ -21,7 +21,7 @@ for key in particle_source_names.keys():
     if particle_source_names[key] == "single_centre":
         del(particle_source_names[key])
         break
-
+        
 # Generate simple list with all source IDs
 sourceIDs = list(particle_source_names.keys())
 #print(sourceIDs)
@@ -32,11 +32,12 @@ centresBySrc = dict() # dict with the ids of the central particles
 for sID in sourceIDs:
     pIDs = particle_constants["particleID"].loc[particle_constants["sourceID"] == sID].tolist()
     particlesBySrc.update({sID : pIDs})
-    centresBySrc.update({sID : min(pIDs)}) # the smalles pID for each source is the centre
+    centresBySrc.update({sID : min(pIDs)}) # the smallest pID for each source is the centre
 #print(particlesBySrc)
 #print(centresBySrc)
 
 
+# Create Trajectories
 trajsBySrc = dict() # Dict for all trajectories
 ctrajsBySrc = dict() # Dict for central trajectories
 lostParticles = list()
@@ -60,3 +61,12 @@ for sID in sourceIDs:
         trajs.append(tr)
     trajsBySrc.update({sID : trajs})
 print(lostParticles)
+
+
+# Create Monitors
+monBySrc = dict()
+for sID in sourceIDs:
+    ctr = ctrajsBySrc[sID]
+    t0 = ctr.find_time("z", 501)
+    mon = ParticleMonitor(time0=t0, trajectory=ctr)
+    monBySrc.update({sID : mon})
