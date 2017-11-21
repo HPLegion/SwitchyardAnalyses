@@ -7,6 +7,8 @@ from PhaseSpaceEval.trajectory import Trajectory
 from PhaseSpaceEval.particlemonitor import ParticleMonitor
 
 
+
+
 MODELNAME = "flatplates"
 RAW_PATH = "rawdata_" + MODELNAME + "/"
 EMIT_FILENAME = "emit_" + MODELNAME + ".csv" # Name for the emittance output file
@@ -14,6 +16,9 @@ EMIT_FILENAME = "emit_" + MODELNAME + ".csv" # Name for the emittance output fil
 particle_source_names = import_source_names(RAW_PATH + MODELNAME + "-source_names.txt")
 particle_constants = import_particle_constants(RAW_PATH + MODELNAME + "-constants.txt")
 particle_trajectories = import_particle_trajectories(RAW_PATH + MODELNAME + "-trajectories.txt")
+
+
+
 
 
 # Delete the single_centre source, not required
@@ -35,6 +40,9 @@ for sID in sourceIDs:
     centresBySrc.update({sID : min(pIDs)}) # the smallest pID for each source is the centre
 #print(particlesBySrc)
 #print(centresBySrc)
+
+
+
 
 
 # Create Trajectories
@@ -63,6 +71,9 @@ for sID in sourceIDs:
 print(lostParticles)
 
 
+
+
+
 # Create Monitors
 monBySrc = dict()
 for sID in sourceIDs:
@@ -70,3 +81,24 @@ for sID in sourceIDs:
     t0 = ctr.find_time("z", 501)
     mon = ParticleMonitor(time0=t0, trajectory=ctr)
     monBySrc.update({sID : mon})
+
+
+
+
+
+# Record Monitor Interactions
+for sID in sourceIDs:
+    mon = monBySrc[sID]
+    mon.reset_events()
+    mon.reset_misses()
+    for tr in trajsBySrc[sID]:
+        mon.record_intersect(tr)
+
+# Read Out misses and events
+missesBySrc = dict()
+eventsBySrc = dict()
+for sID in sourceIDs:
+    missesBySrc.update({sID : monBySrc[sID].get_misses()})
+    eventsBySrc.update({sID : monBySrc[sID].get_events()})
+    
+#print(missesBySrc)
