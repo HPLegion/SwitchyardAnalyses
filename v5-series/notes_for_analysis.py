@@ -25,10 +25,20 @@ for key in particle_source_names.keys():
 
 # Generate simple list with all source IDs
 sourceIDs = list(particle_source_names.keys())
+#print(sourceIDs)
 
-# Create lists with all particles belonging to a source
-pBySrc = dict()
-for sid in sourceIDs:
-    pids = particle_constants["particleID"].loc["sourceID" == sid].tolist()
-    pBySrc.update({sid : pids})
+# Create lists with all particles belonging to a source and with the id of the central particles
+particlesBySrc = dict() # dict for all particleIDs
+centresBySrc = dict() # dict with the ids of the central particles
+for sID in sourceIDs:
+    pIDs = particle_constants["particleID"].loc[particle_constants["sourceID"] == sID].tolist()
+    particlesBySrc.update({sID : pIDs})
+    centresBySrc.update({sID : min(pIDs)}) # the smalles pID for each source is the centre
+#print(particlesBySrc)
+#print(centresBySrc)
+
+
+
+
+
 
