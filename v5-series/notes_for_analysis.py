@@ -101,7 +101,7 @@ missesBySrc = dict()
 eventsBySrc = dict()
 for sID in sourceIDs:
     missesBySrc.update({sID : monBySrc[sID].get_misses()})
-    eventsBySrc.update({sID : monBySrc[sID].get_events()}) 
+    eventsBySrc.update({sID : monBySrc[sID].get_events()})
 #print(missesBySrc)
 
 # Add lost particles to miss counter
@@ -137,4 +137,4 @@ for sID in sourceIDs:
 
 emit_df.sort_values(["x_offset", "y_offset"], inplace=True)
 emit_df.reset_index(inplace=True, drop=True)
-emit_df.to_csv(EMIT_FILENAME)
+emit_df
