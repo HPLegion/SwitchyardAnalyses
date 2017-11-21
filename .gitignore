@@ -1,0 +1,6 @@
+/v3*
+/v4*
+/v5-series/raw*
+/v5-series/.ipynb_checkpoints
+v5-series/PhaseSpaceEval/__pycache__/
+v5-series/emittances_flatplates.csv
