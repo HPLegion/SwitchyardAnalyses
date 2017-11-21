@@ -9,12 +9,11 @@ from PhaseSpaceEval.particlemonitor import ParticleMonitor
 
 MODELNAME = "flatplates"
 RAW_PATH = "rawdata_" + MODELNAME + "/"
+EMIT_FILENAME = "emit_" + MODELNAME + ".csv" # Name for the emittance output file
 
 particle_source_names = import_source_names(RAW_PATH + MODELNAME + "-source_names.txt")
 particle_constants = import_particle_constants(RAW_PATH + MODELNAME + "-constants.txt")
 particle_trajectories = import_particle_trajectories(RAW_PATH + MODELNAME + "-trajectories.txt")
-
-EMIT_FILENAME = "emit_" + MODELNAME + ".csv" # Name for the emittance output file
 
 
 # Delete the single_centre source, not required
@@ -38,7 +37,26 @@ for sID in sourceIDs:
 #print(centresBySrc)
 
 
+trajsBySrc = dict() # Dict for all trajectories
+ctrajsBySrc = dict() # Dict for central trajectories
+lostParticles = list()
+for sID in sourceIDs:
+    # Compute central trajectory for each sID
+    cID = centresBySrc[sID]
+    ctr = Trajectory(particle_trajectories[cID],
+                     particle_constants.loc[particle_constants["particleID"] == cID].squeeze())
+    ctrajsBySrc.update({sID : ctr})
 
-
-
-
+    # For each sID compute the trajectories of all pIDs
+    # Note Particles that cannot be found in trajectory dataframe, these were lost
+    pIDs = particlesBySrc[sID]
+    trajs = list()
+    for pID in pIDs:
+        try:
+            tr = Trajectory(particle_trajectories[pID],
+                            particle_constants.loc[particle_constants["particleID"] == pID].squeeze())
+        except KeyError:
+            lostParticles.append(pID)
+        trajs.append(tr)
+    trajsBySrc.update({sID : trajs})
+print(lostParticles)
