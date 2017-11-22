@@ -7,3 +7,5 @@ v5-series/emittances_flatplates.csv
 v5-series/emit_flatplates.csv
 v5-series/emit_startingplane.csv
 v5-series/emit_sashasbender.csv
+v5-series/emit_cylinder.csv
+v5-series/emit_segmented.csv
