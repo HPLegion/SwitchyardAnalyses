@@ -3,9 +3,5 @@
 /v5-series/raw*
 /v5-series/.ipynb_checkpoints
 v5-series/PhaseSpaceEval/__pycache__/
-v5-series/emittances_flatplates.csv
-v5-series/emit_flatplates.csv
-v5-series/emit_startingplane.csv
-v5-series/emit_sashasbender.csv
-v5-series/emit_cylinder.csv
-v5-series/emit_segmented.csv
+v5-series/emit_*.csv
+v5-series/mon_*.csv
