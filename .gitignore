@@ -5,3 +5,6 @@
 v5-series/PhaseSpaceEval/__pycache__/
 v5-series/emit_*.csv
 v5-series/mon_*.csv
+v5-series/*.csv
+v5-series/*.png
+
