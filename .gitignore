@@ -11,3 +11,4 @@ v7-series/PhaseSpaceEval/__pycache__/
 v7-series/raw*
 v7-series/emit_*.csv
 v7-series/mon_*.csv
+v7-series/.ipynb_checkpoints
