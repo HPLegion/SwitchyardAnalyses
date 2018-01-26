@@ -7,4 +7,7 @@ v5-series/emit_*.csv
 v5-series/mon_*.csv
 v5-series/*.csv
 v5-series/*.png
-
+v7-series/PhaseSpaceEval/__pycache__/
+v7-series/raw*
+v7-series/emit_*.csv
+v7-series/mon_*.csv
